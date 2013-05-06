@@ -2,128 +2,73 @@
       * 地方に属する都道府県の数を表示します。
       * 
        IDENTIFICATION DIVISION.
-       PROGRAM-ID.   REGION-PREFECTURES.
+       PROGRAM-ID. REGION-PREFECTURES.
        
        DATA DIVISION.
        WORKING-STORAGE SECTION.
+       77  ARGC                       PIC 9(2).
+       77  DATA-DIR                   PIC X(80).
+       77  REGIONS-FILENAME           PIC X(80).
+       77  PREFECTURES-FILENAME       PIC X(80).
+       77  N GLOBAL                   PIC 9(2).
       * 地方の一覧
-       01  REGIONS GLOBAL.
-           05  REGIONS-COUNT            PIC 9(2) VALUE ZERO.
-           05  REGION                   OCCURS 10 INDEXED BY I.
-               10  REGION-CODE          PIC X(2) VALUE SPACE.
-               10  REGION-NAME          PIC N(4) VALUE SPACE.
-               10  PREFECTURES-COUNT    PIC 9(2) VALUE ZERO.
-               10  PREFECTURE           OCCURS 10 INDEXED BY J.
-                   15  PREFECTURE-CODE  PIC X(2) VALUE SPACE.
-                   15  PREFECTURE-NAME  PIC N(5) VALUE SPACE.
+       01  REGIONS.
+       COPY "Regions".
        
        PROCEDURE DIVISION.
-         CALL "READ-REGIONS".
-         CALL "READ-PREFECTURES".
-         
-         PERFORM VARYING I FROM 1 BY 1 UNTIL I > REGIONS-COUNT
-           DISPLAY REGION-CODE(I)
-               ":" REGION-NAME(I)
-               ":" PREFECTURES-COUNT(I);
-           PERFORM VARYING J FROM 1 BY 1 UNTIL J > PREFECTURES-COUNT(I)
-             DISPLAY "  " PREFECTURE-CODE(I, J)
-                 ":" PREFECTURE-NAME(I, J);
-           END-PERFORM
-         END-PERFORM
+      D  DISPLAY "ACCEPT FILENAMES".
+         PERFORM ACCEPT-FILENAMES.
+      D  DISPLAY "INITIALIZE REGIONS".
+         INITIALIZE REGIONS.
+      D  DISPLAY "CALL READ-REGIONS".
+         CALL "READ-REGIONS" USING REGIONS-FILENAME, REGIONS.
+      D  DISPLAY "CALL READ-PREFECTURES".
+         CALL "READ-PREFECTURES" USING PREFECTURES-FILENAME, REGIONS.
+      D  DISPLAY "CALL SHOW-REGIONS".
+         CALL "SHOW-REGIONS" USING REGIONS.
+      D  DISPLAY "STOP RUN".
          STOP RUN.
-      
-      *   
-      *   地方の一覧を読み込みます。
-      *   
-         IDENTIFICATION DIVISION.
-         PROGRAM-ID. READ-REGIONS.
-         
-         ENVIRONMENT DIVISION.
-         INPUT-OUTPUT SECTION.
-         FILE-CONTROL.
-           SELECT REGIONS-FILE
-             ASSIGN TO "../data/Regions.txt"
-             ORGANIZATION IS LINE SEQUENTIAL
-             FILE STATUS IS REGIONS-STATUS.
-         
-         DATA DIVISION.
-         FILE SECTION.
-      *   地方ファイル
-         FD  REGIONS-FILE.
-         01  REGION-RECORD.
-             05  REGION-CODE            PIC X(2).
-             05  NAME                   PIC N(4).
-         
-         WORKING-STORAGE SECTION.
-         01  REGIONS-STATUS             PIC X(2).
-         
-         PROCEDURE DIVISION.
-           OPEN INPUT REGIONS-FILE.
-           SET I TO 1.
-           PERFORM UNTIL REGIONS-STATUS NOT = "00"
-             READ REGIONS-FILE
-               AT END
-                 CONTINUE;
-               NOT AT END
-                 ADD 1 TO REGIONS-COUNT;
-                 MOVE REGION-RECORD TO REGION(I);
-                 MOVE 0 TO PREFECTURES-COUNT(I);
-                 SET I UP BY 1;
-             END-READ
-           END-PERFORM
-           CLOSE REGIONS-FILE.
-           EXIT PROGRAM.
-         
-         END PROGRAM READ-REGIONS.
        
-      *   
-      *   都道府県の一覧を読み込みます。
-      *   
+       ACCEPT-FILENAMES SECTION.
+         ACCEPT ARGC FROM ARGUMENT-NUMBER.
+         IF ARGC = 0
+           THEN
+             MOVE "../data" TO DATA-DIR;
+           ELSE
+             ACCEPT DATA-DIR FROM ARGUMENT-VALUE;
+         END-IF.
+         CALL "STRLEN" USING DATA-DIR.
+         STRING
+           DATA-DIR(1:N) DELIMITED BY SIZE
+           "/Regions.txt" DELIMITED BY SIZE
+           INTO REGIONS-FILENAME
+         END-STRING.
+         STRING
+           DATA-DIR(1:N) DELIMITED BY SIZE
+           "/PrefectureRegions.txt" DELIMITED BY SIZE
+           INTO PREFECTURES-FILENAME
+         END-STRING.
+      D  CALL "STRLEN" USING REGIONS-FILENAME.
+      D  DISPLAY "REGIONS-FILENAME: " REGIONS-FILENAME(1:N).
+      D  CALL "STRLEN" USING PREFECTURES-FILENAME.
+      D  DISPLAY "PREFECTURES-FILENAME: " PREFECTURES-FILENAME(1:N).
+         EXIT.
+       
+      *
+      *   文字列の長さを求めます。
+      *
          IDENTIFICATION DIVISION.
-         PROGRAM-ID. READ-PREFECTURES.
-         
-         ENVIRONMENT DIVISION.
-         INPUT-OUTPUT SECTION.
-         FILE-CONTROL.
-           SELECT PREFECTURES-FILE
-             ASSIGN TO "../data/PrefectureRegions.txt"
-             ORGANIZATION IS LINE SEQUENTIAL
-             FILE STATUS IS PREFECTURES-STATUS.
+         PROGRAM-ID. STRLEN.
          
          DATA DIVISION.
-         FILE SECTION.
-      *   都道府県ファイル
-         FD  PREFECTURES-FILE.
-         01  PREFECTURE-RECORD.
-             05  PREFECTURE-CODE        PIC X(2).
-             05  NAME                   PIC N(5).
-             05  REGION-CODE            PIC X(2).
+         LINKAGE SECTION.
+         77  S                          PIC X(80).
          
-         WORKING-STORAGE SECTION.
-         01  PREFECTURES-STATUS         PIC X(2).
-         
-         PROCEDURE DIVISION.
-           OPEN INPUT PREFECTURES-FILE.
-           PERFORM UNTIL PREFECTURES-STATUS NOT = "00"
-             READ PREFECTURES-FILE
-               AT END
-                 CONTINUE;
-               NOT AT END
-                 SET I TO 1;
-                 SEARCH REGION VARYING I
-                   AT END
-                     DISPLAY "REGION-CODE NOT-FOUND";
-                   WHEN REGION-CODE OF PREFECTURE-RECORD =
-                       REGION-CODE OF REGION(I)
-                     ADD 1 TO PREFECTURES-COUNT(I);
-                     SET J TO PREFECTURES-COUNT(I);
-                     MOVE PREFECTURE-RECORD TO PREFECTURE(I, J);
-                 END-SEARCH
-             END-READ
-           END-PERFORM
-           CLOSE PREFECTURES-FILE.
+         PROCEDURE DIVISION USING S.
+           PERFORM VARYING N FROM 80 BY -1 UNTIL S(N:1) NOT = " "
+           END-PERFORM.
            EXIT PROGRAM.
          
-         END PROGRAM READ-PREFECTURES.
+         END PROGRAM STRLEN.
        
        END PROGRAM REGION-PREFECTURES.

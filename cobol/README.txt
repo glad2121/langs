@@ -1,2 +1,2 @@
-# cobc -x -std=cobol85 RegionPrefectures.cbl
+# make
 # ./RegionPrefectures.sh
