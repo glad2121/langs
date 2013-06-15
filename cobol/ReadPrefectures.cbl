@@ -1,6 +1,6 @@
-      * 
+      ******************************************************************
       * ìsìπï{åßÇÃàÍóóÇì«Ç›çûÇ›Ç‹Ç∑ÅB
-      * 
+      ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. READ-PREFECTURES.
        
@@ -17,17 +17,17 @@
       * ìsìπï{åßÉtÉ@ÉCÉã
        FD  PREFECTURES-FILE.
        01  PREFECTURE-RECORD.
-           05  PREFECTURE-CODE        PIC X(2).
-           05  NAME                   PIC N(5).
-           05  REGION-CODE            PIC X(2).
+         05  PREFECTURE-CODE           PIC X(2).
+         05  NAME                      PIC N(5).
+         05  REGION-CODE               PIC X(2).
        
        WORKING-STORAGE SECTION.
-       01  PREFECTURES-STATUS         PIC X(2).
+       01  PREFECTURES-STATUS          PIC X(2).
        
        LINKAGE SECTION.
-       77  PREFECTURES-FILENAME       PIC X(80).
+       77  PREFECTURES-FILENAME        PIC X(80).
        01  REGIONS.
-       COPY "Regions".
+         COPY "Regions".
        
        PROCEDURE DIVISION USING PREFECTURES-FILENAME, REGIONS.
          OPEN INPUT PREFECTURES-FILE.
@@ -39,9 +39,13 @@
                PERFORM ADD-PREFECTURE;
            END-READ
          END-PERFORM.
+       READ-PREFECTURES-EXIT.
          CLOSE PREFECTURES-FILE.
          EXIT PROGRAM.
        
+      ******************************************************************
+      * ínàÊÇ…ìsìπï{åßÇí«â¡ÇµÇ‹Ç∑ÅB
+      ******************************************************************
        ADD-PREFECTURE SECTION.
          SET I TO 1.
          SEARCH REGION VARYING I
@@ -53,6 +57,7 @@
              SET J TO PREFECTURES-COUNT(I);
              MOVE PREFECTURE-RECORD TO PREFECTURE(I, J);
          END-SEARCH.
+       ADD-PREFECTURE-EXIT.
          EXIT.
        
        END PROGRAM READ-PREFECTURES.

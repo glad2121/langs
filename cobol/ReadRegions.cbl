@@ -1,6 +1,6 @@
-      * 
+      ******************************************************************
       * 地方の一覧を読み込みます。
-      * 
+      ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. READ-REGIONS.
        
@@ -17,16 +17,16 @@
       * 地方ファイル
        FD  REGIONS-FILE.
        01  REGION-RECORD.
-           05  REGION-CODE            PIC X(2).
-           05  NAME                   PIC N(4).
+         05  REGION-CODE               PIC X(2).
+         05  NAME                      PIC N(4).
        
        WORKING-STORAGE SECTION.
-       01  REGIONS-STATUS             PIC X(2).
+       01  REGIONS-STATUS              PIC X(2).
        
        LINKAGE SECTION.
-       77  REGIONS-FILENAME           PIC X(80).
+       77  REGIONS-FILENAME            PIC X(80).
        01  REGIONS.
-       COPY "Regions".
+         COPY "Regions".
        
        PROCEDURE DIVISION USING REGIONS-FILENAME, REGIONS.
          OPEN INPUT REGIONS-FILE.
@@ -42,6 +42,7 @@
                SET I UP BY 1;
            END-READ
          END-PERFORM.
+       READ-REGIONS-EXIT.
          CLOSE REGIONS-FILE.
          EXIT PROGRAM.
        
