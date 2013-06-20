@@ -17,8 +17,8 @@
       * 地方ファイル
        FD  REGIONS-FILE.
        01  REGION-RECORD.
-         05  REGION-CODE               PIC X(2).
-         05  NAME                      PIC N(4).
+         03  REGION-CODE               PIC X(2).
+         03  NAME                      PIC N(4).
        
        WORKING-STORAGE SECTION.
        01  REGIONS-STATUS              PIC X(2).
@@ -28,7 +28,8 @@
        01  REGIONS.
          COPY "Regions".
        
-       PROCEDURE DIVISION USING REGIONS-FILENAME, REGIONS.
+       PROCEDURE DIVISION
+           USING REGIONS-FILENAME, REGIONS.
          OPEN INPUT REGIONS-FILE.
          SET I TO 1.
          PERFORM UNTIL REGIONS-STATUS NOT = "00"

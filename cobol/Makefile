@@ -7,7 +7,10 @@ COBCFLAGS = -std=cobol85
 TARGET = RegionPrefectures
 OBJS = $(TARGET).o ReadRegions.o ReadPrefectures.o ShowRegions.o
 
-all: $(TARGET)
+all: FizzBuzz $(TARGET)
+
+FizzBuzz: FizzBuzz.cbl
+	cobc -x $(COBCFLAGS) $<
 
 $(TARGET): $(OBJS)
 	cobc -x $(COBCFLAGS) $(OBJS)
@@ -21,4 +24,4 @@ $(TARGET).o: $(TARGET).cbl
 	cobc -c $(COBCFLAGS) $<
 
 clean:
-	-rm $(TARGET) *.o
+	-rm FizzBuzz $(TARGET) *.o

@@ -17,9 +17,9 @@
       * ìsìπï{åßÉtÉ@ÉCÉã
        FD  PREFECTURES-FILE.
        01  PREFECTURE-RECORD.
-         05  PREFECTURE-CODE           PIC X(2).
-         05  NAME                      PIC N(5).
-         05  REGION-CODE               PIC X(2).
+         03  PREFECTURE-CODE           PIC X(2).
+         03  NAME                      PIC N(5).
+         03  REGION-CODE               PIC X(2).
        
        WORKING-STORAGE SECTION.
        01  PREFECTURES-STATUS          PIC X(2).
@@ -29,7 +29,8 @@
        01  REGIONS.
          COPY "Regions".
        
-       PROCEDURE DIVISION USING PREFECTURES-FILENAME, REGIONS.
+       PROCEDURE DIVISION
+           USING PREFECTURES-FILENAME, REGIONS.
          OPEN INPUT PREFECTURES-FILE.
          PERFORM UNTIL PREFECTURES-STATUS NOT = "00"
            READ PREFECTURES-FILE
@@ -44,7 +45,7 @@
          EXIT PROGRAM.
        
       ******************************************************************
-      * ínàÊÇ…ìsìπï{åßÇí«â¡ÇµÇ‹Ç∑ÅB
+      * ínï˚Ç…ìsìπï{åßÇí«â¡ÇµÇ‹Ç∑ÅB
       ******************************************************************
        ADD-PREFECTURE SECTION.
          SET I TO 1.
