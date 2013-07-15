@@ -23,7 +23,7 @@ public abstract class ElementaryItem
     }
 
     public T value(V value) {
-        this.value = value;
+        set(value);
         return self();
     }
 

@@ -2,42 +2,43 @@ package langs.cobol.framework;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Numeric Item.
  */
-public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
+public class Pic9 extends NumericItem<Pic9, BigDecimal> {
 
     private final int scale;
 
-    public static Pic_9 of(int value) {
-        return new Pic_9(0).value(value);
+    private final RoundingMode roundingMode = RoundingMode.DOWN;
+
+    public static Pic9 of(int value) {
+        return new Pic9(0).value(value);
     }
 
-    public static Pic_9 of(long value) {
-        return new Pic_9(0).value(value);
+    public static Pic9 of(long value) {
+        return new Pic9(0).value(value);
     }
 
-    public static Pic_9 of(BigDecimal value) {
-        return new Pic_9(0).value(value);
+    public static Pic9 of(BigDecimal value) {
+        return new Pic9(0).value(value);
     }
 
-    public static Pic_9 of(String value) {
-        return new Pic_9(0).value(value);
+    public static Pic9 of(String value) {
+        return new Pic9(0).value(value);
     }
 
-    public static Pic_9 sum(Object... values) {
-        return Pic_9.of(Constants.ZERO).addAll(values);
+    public static Pic9 sum(Object... values) {
+        return Pic9.of(Constants.ZERO).addAll(values);
     }
 
-    public Pic_9(int length) {
+    public Pic9(int length) {
         this(length, 0);
     }
 
-    public Pic_9(int length, int scale) {
+    public Pic9(int length, int scale) {
         super(length, Constants.ZERO);
         this.scale = scale;
     }
@@ -54,15 +55,15 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
         return value().longValueExact();
     }
 
-    public Pic_9 value(int value) {
+    public Pic9 value(int value) {
         return value(decimal(value));
     }
 
-    public Pic_9 value(long value) {
+    public Pic9 value(long value) {
         return value(decimal(value));
     }
 
-    public Pic_9 value(String value) {
+    public Pic9 value(String value) {
         return value(decimal(value));
     }
 
@@ -74,12 +75,16 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
         set(decimal(value));
     }
 
-    public void set(String value) {
-        set(decimal(value));
+    @Override
+    public void set(BigDecimal value) {
+        if (length() != 0) {
+            value = value.setScale(scale(), roundingMode);
+        }
+        super.set(value);
     }
 
-    public void set(String line, int offset) {
-        set(StringUtils.substring(line, offset, offset + length()));
+    public void set(String value) {
+        set(decimal(value));
     }
 
     /**
@@ -191,7 +196,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * ADD value TO self
      * (value + self -> self).
      */
-    public Pic_9 add(int value) {
+    public Pic9 add(int value) {
         return add(decimal(value));
     }
 
@@ -199,7 +204,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * ADD value TO self
      * (value + self -> self).
      */
-    public Pic_9 add(long value) {
+    public Pic9 add(long value) {
         return add(decimal(value));
     }
 
@@ -207,7 +212,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * ADD value TO self
      * (value + self -> self).
      */
-    public Pic_9 add(BigDecimal value) {
+    public Pic9 add(BigDecimal value) {
         set(value.add(value()));
         return self();
     }
@@ -216,7 +221,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * ADD value TO self
      * (value + self -> self).
      */
-    public Pic_9 add(String value) {
+    public Pic9 add(String value) {
         return add(decimal(value));
     }
 
@@ -224,11 +229,11 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * ADD other TO self
      * (other + self -> self).
      */
-    public Pic_9 add(Pic_9 other) {
+    public Pic9 add(Pic9 other) {
         return add(other.value());
     }
 
-    Pic_9 addAll(Object... values) {
+    Pic9 addAll(Object... values) {
         for (Object value : values) {
             add(decimal(value));
         }
@@ -239,8 +244,8 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * ADD self TO to
      * (self + to -> to).
      */
-    public void addTo(Pic_9... to) {
-        for (Pic_9 each : to) {
+    public void addTo(Pic9... to) {
+        for (Pic9 each : to) {
             each.add(value());
         }
     }
@@ -249,8 +254,8 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * ADD self TO to GIVING giving
      * (self + to -> giving).
      */
-    public void addTo(BigDecimal to, Pic_9[] giving) {
-        for (Pic_9 each : giving) {
+    public void addTo(BigDecimal to, Pic9[] giving) {
+        for (Pic9 each : giving) {
             each.set(value().add(to));
         }
     }
@@ -259,7 +264,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * SUBTRACT value FROM self
      * (self - value -> self).
      */
-    public Pic_9 subtract(BigDecimal value) {
+    public Pic9 subtract(BigDecimal value) {
         set(value().subtract(value));
         return self();
     }
@@ -268,8 +273,8 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * SUBTRACT self FROM from
      * (from - self -> from).
      */
-    public void subtractFrom(Pic_9... from) {
-        for (Pic_9 each : from) {
+    public void subtractFrom(Pic9... from) {
+        for (Pic9 each : from) {
             each.subtract(value());
         }
     }
@@ -278,8 +283,8 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * SUBTRACT self FROM from GIVING giving
      * (from - self -> giving).
      */
-    public void subtractFrom(BigDecimal from, Pic_9[] giving) {
-        for (Pic_9 each : giving) {
+    public void subtractFrom(BigDecimal from, Pic9[] giving) {
+        for (Pic9 each : giving) {
             each.subtract(from.subtract(value()));
         }
     }
@@ -288,7 +293,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * MULTIPLY value BY self
      * (value * self -> self).
      */
-    public Pic_9 multiply(BigDecimal value) {
+    public Pic9 multiply(BigDecimal value) {
         set(value.multiply(value()));
         return self();
     }
@@ -297,8 +302,8 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * MULTIPLY self BY by
      * (self * by -> by).
      */
-    public void multiplyBy(Pic_9... by) {
-        for (Pic_9 each : by) {
+    public void multiplyBy(Pic9... by) {
+        for (Pic9 each : by) {
             each.multiply(value());
         }
     }
@@ -307,8 +312,8 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * MULTIPLY self BY by GIVING giving
      * (self * by -> giving).
      */
-    public void multiplyBy(BigDecimal by, Pic_9[] giving) {
-        for (Pic_9 each : giving) {
+    public void multiplyBy(BigDecimal by, Pic9[] giving) {
+        for (Pic9 each : giving) {
             each.set(value().multiply(by));
         }
     }
@@ -317,7 +322,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * DIVIDE value INTO self
      * (self / value -> self).
      */
-    public Pic_9 divide(BigDecimal value) {
+    public Pic9 divide(BigDecimal value) {
         set(value().divide(value));
         return self();
     }
@@ -326,7 +331,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * DEVIDE self BY by GIVING giving REMAINDER remainder
      * (self / by -> giving, self % by -> remainder).
      */
-    public void divideBy(int by, Pic_9 giving, Pic_9 remainder) {
+    public void divideBy(int by, Pic9 giving, Pic9 remainder) {
         divideBy(decimal(by), giving, remainder);
     }
 
@@ -334,7 +339,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * DEVIDE self BY by GIVING giving REMAINDER remainder
      * (self / by -> giving, self % by -> remainder).
      */
-    public void divideBy(BigDecimal by, Pic_9 giving, Pic_9 remainder) {
+    public void divideBy(BigDecimal by, Pic9 giving, Pic9 remainder) {
         giving.set(value().divideToIntegralValue(by));
         remainder.set(value().remainder(by));
     }
@@ -343,25 +348,42 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
      * DEVIDE self BY by GIVING giving REMAINDER remainder
      * (self / by -> giving, self % by -> remainder).
      */
-    public void divideBy(Pic_9 by, Pic_9 giving, Pic_9 remainder) {
+    public void divideBy(Pic9 by, Pic9 giving, Pic9 remainder) {
         divideBy(by.value(), giving, remainder);
     }
 
     @Override
+    public int byteLength() {
+        return length();
+    }
+
+    @Override
     public void readFrom(byte[] buf, int offset) {
-        set(new String(buf, offset, byteLength(), encoding()));
+        String s = new String(buf, offset, byteLength(), encoding());
+        int index = s.length() - 1;
+        int ch = s.charAt(index);
+        if ((ch & 0x40) != 0) {
+            int digit = ch & 0xF;
+            s = '-' + s.substring(0, index) + digit;
+        }
+        set(new BigDecimal(new BigInteger(s), scale()));
     }
 
     @Override
     public byte[] toByteArray() {
         StringBuilder builder = new StringBuilder();
-        builder.append(toString());
+        builder.append(value().unscaledValue().abs());
         int diff = builder.length() - length();
         for (; diff < 0; ++diff) {
             builder.insert(0, '0');
         }
         if (diff > 0) {
             builder.delete(0, diff);
+        }
+        if (value().signum() < 0) {
+            int index = length() - 1;
+            int ch = builder.charAt(index) | 0x40;
+            builder.setCharAt(index, (char) ch);
         }
         return builder.toString().getBytes(encoding());
     }
@@ -395,8 +417,8 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
     }
 
     BigDecimal decimal(Object value) {
-        if (value instanceof Pic_9) {
-            return ((Pic_9) value).value();
+        if (value instanceof Pic9) {
+            return ((Pic9) value).value();
         } else if (value instanceof BigDecimal) {
             return (BigDecimal) value;
         } else if (value instanceof BigInteger) {
@@ -424,7 +446,7 @@ public class Pic_9 extends NumericItem<Pic_9, BigDecimal> {
 
     public static class Helper {
 
-        public static Pic_9[] giving(Pic_9... giving) {
+        public static Pic9[] giving(Pic9... giving) {
             return giving;
         }
 

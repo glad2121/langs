@@ -2,7 +2,7 @@ package langs.cobol;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import langs.cobol.framework.Pic_X;
+import langs.cobol.framework.PicX;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +24,7 @@ public class ReadRegionsTest {
 
     @Test
     public void testExecute() {
-        Pic_X filename = Pic_X.of("../data/Regions.txt");
+        PicX filename = PicX.of("../data/Regions.txt");
         Regions regions = new Regions();
         program.using(filename, regions).execute();
         assertThat(regions.regionsCount.intValue(), is(8));

@@ -1,16 +1,16 @@
 package langs.cobol;
 
-import langs.cobol.framework.Pic_9;
+import langs.cobol.framework.Pic9;
 import langs.cobol.framework.Program;
 
 public class FizzBuzz extends Program {
 
     // DATA DIVISION.
     // WORKING-STORAGE SECTION.
-    final Pic_9 i  = new Pic_9(4);
-    final Pic_9 q  = new Pic_9(4);
-    final Pic_9 r3 = new Pic_9(4);
-    final Pic_9 r5 = new Pic_9(4);
+    final Pic9 i  = new Pic9(4);
+    final Pic9 q  = new Pic9(4);
+    final Pic9 r3 = new Pic9(4);
+    final Pic9 r5 = new Pic9(4);
 
     public static void main(String[] args) {
         new FizzBuzz().execute();

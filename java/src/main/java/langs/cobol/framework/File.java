@@ -19,7 +19,7 @@ public class File {
 
     private Organization organization;
 
-    private Pic_X status;
+    private PicX status;
 
     private FileHandler handler;
 
@@ -32,7 +32,7 @@ public class File {
         return this;
     }
 
-    public File assignTo(Pic_X assignTo) {
+    public File assignTo(PicX assignTo) {
         return assignTo(assignTo.value());
     }
 
@@ -41,7 +41,7 @@ public class File {
         return this;
     }
 
-    public File fileStatusIs(Pic_X status) {
+    public File fileStatusIs(PicX status) {
         this.status = status;
         return this;
     }

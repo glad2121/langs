@@ -2,28 +2,19 @@ package langs.cobol.framework;
 
 import java.nio.charset.Charset;
 
-import org.apache.commons.lang.StringUtils;
+public class PicN extends ElementaryItem<PicN, String> {
 
-/**
- * Alphanumeric Item.
- */
-public class Pic_X extends ElementaryItem<Pic_X, String> {
-
-    public static Pic_X of(String value) {
-        return new Pic_X(0).value(value);
+    public static PicN of(String value) {
+        return new PicN(0).value(value);
     }
 
-    public Pic_X(int length) {
+    public PicN(int length) {
         super(length, "");
-    }
-
-    public void set(String line, int offset) {
-        set(StringUtils.substring(line, offset, offset + length()));
     }
 
     @Override
     public int byteLength() {
-        return length();
+        return length() * 2;
     }
 
     @Override
@@ -39,7 +30,7 @@ public class Pic_X extends ElementaryItem<Pic_X, String> {
         }
         int diff = builder.length() - length();
         for (; diff < 0; ++diff) {
-            builder.append(' ');
+            builder.append('　');
         }
         if (diff > 0) {
             builder.setLength(length());
@@ -48,7 +39,7 @@ public class Pic_X extends ElementaryItem<Pic_X, String> {
     }
 
     Charset encoding() {
-        return Constants.ISO_8859_1;
+        return Constants.WINDOWS_31J;
     }
 
 }

@@ -2,7 +2,7 @@ package langs.cobol;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import langs.cobol.framework.Pic_X;
+import langs.cobol.framework.PicX;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +36,7 @@ public class ReadPrefecturesTest {
 
     @Test
     public void testExecute() {
-        Pic_X filename = Pic_X.of("../data/PrefectureRegions.txt");
+        PicX filename = PicX.of("../data/PrefectureRegions.txt");
         program.using(filename, regions).execute();
         assertThat(regions.prefecturesCount(1).intValue(), is(1));
         assertThat(regions.prefectureCode(1, 1).value(), is("01"));

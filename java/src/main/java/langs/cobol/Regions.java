@@ -1,9 +1,9 @@
 package langs.cobol;
 
 import langs.cobol.framework.GroupItem;
-import langs.cobol.framework.Pic_9;
-import langs.cobol.framework.Pic_N;
-import langs.cobol.framework.Pic_X;
+import langs.cobol.framework.Pic9;
+import langs.cobol.framework.PicN;
+import langs.cobol.framework.PicX;
 import langs.cobol.framework.Table;
 
 /**
@@ -11,7 +11,7 @@ import langs.cobol.framework.Table;
  */
 public class Regions extends GroupItem<Regions> {
 
-    public final Pic_9 regionsCount = new Pic_9(2);
+    public final Pic9 regionsCount = new Pic9(2);
 
     public final Table<Region> region =
             Table.of(Region.class, 10);
@@ -20,11 +20,11 @@ public class Regions extends GroupItem<Regions> {
         return region.get(i);
     }
 
-    public Pic_X regionCode(int i) {
+    public PicX regionCode(int i) {
         return region(i).regionCode;
     }
 
-    public Pic_N regionName(int i) {
+    public PicN regionName(int i) {
         return region(i).regionName;
     }
 
@@ -32,7 +32,7 @@ public class Regions extends GroupItem<Regions> {
         region(regionsCount.add(1).intValue()).set(code, name);
     }
 
-    public Pic_9 prefecturesCount(int i) {
+    public Pic9 prefecturesCount(int i) {
         return region(i).prefecturesCount;
     }
 
@@ -40,11 +40,11 @@ public class Regions extends GroupItem<Regions> {
         return region(i).prefecture(j);
     }
 
-    public Pic_X prefectureCode(int i, int j) {
+    public PicX prefectureCode(int i, int j) {
         return prefecture(i, j).prefectureCode;
     }
 
-    public Pic_N prefectureName(int i, int j) {
+    public PicN prefectureName(int i, int j) {
         return prefecture(i, j).prefectureName;
     }
 
@@ -58,9 +58,9 @@ public class Regions extends GroupItem<Regions> {
 
     public static class Region {
 
-        public final Pic_X regionCode       = new Pic_X(2);
-        public final Pic_N regionName       = new Pic_N(4);
-        public final Pic_9 prefecturesCount = new Pic_9(2);
+        public final PicX regionCode       = new PicX(2);
+        public final PicN regionName       = new PicN(4);
+        public final Pic9 prefecturesCount = new Pic9(2);
 
         public final Table<Prefecture> prefecture =
                 Table.of(Prefecture.class, 10);
@@ -88,8 +88,8 @@ public class Regions extends GroupItem<Regions> {
 
     public static class Prefecture {
 
-        public final Pic_X prefectureCode = new Pic_X(2);
-        public final Pic_N prefectureName = new Pic_N(5);
+        public final PicX prefectureCode = new PicX(2);
+        public final PicN prefectureName = new PicN(5);
 
         @Override
         public String toString() {

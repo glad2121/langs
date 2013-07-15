@@ -3,8 +3,8 @@ package langs.cobol;
 import langs.cobol.framework.File;
 import langs.cobol.framework.GroupItem;
 import langs.cobol.framework.Organization;
-import langs.cobol.framework.Pic_N;
-import langs.cobol.framework.Pic_X;
+import langs.cobol.framework.PicN;
+import langs.cobol.framework.PicX;
 import langs.cobol.framework.Program;
 
 /**
@@ -17,14 +17,14 @@ public class ReadPrefectures extends Program {
     final PrefectureRecord prefectureRecord = new PrefectureRecord();
 
     // WORKING-STORAGE SECTION.
-    final Pic_X prefecturesStatus = new Pic_X(2);
+    final PicX prefecturesStatus = new PicX(2);
 
     // LINKAGE SECTION.
-    Pic_X prefecturesFilename;
+    PicX prefecturesFilename;
     Regions regions;
 
     public ReadPrefectures using(
-            Pic_X prefecturesFilename, Regions regions) {
+            PicX prefecturesFilename, Regions regions) {
         this.prefecturesFilename = prefecturesFilename;
         this.regions = regions;
         // FILE-CONTROL.
@@ -72,9 +72,9 @@ public class ReadPrefectures extends Program {
 
     static class PrefectureRecord extends GroupItem<PrefectureRecord> {
 
-        public final Pic_X prefectureCode = new Pic_X(2);
-        public final Pic_N name           = new Pic_N(5);
-        public final Pic_X regionCode     = new Pic_X(2);
+        public final PicX prefectureCode = new PicX(2);
+        public final PicN name           = new PicN(5);
+        public final PicX regionCode     = new PicX(2);
 
         public void moveTo(Regions.Prefecture target) {
             prefectureCode.moveTo(target.prefectureCode);

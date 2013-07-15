@@ -1,7 +1,7 @@
 package langs.cobol;
 
-import langs.cobol.framework.Pic_9;
-import langs.cobol.framework.Pic_X;
+import langs.cobol.framework.Pic9;
+import langs.cobol.framework.PicX;
 import langs.cobol.framework.Program;
 
 /**
@@ -12,11 +12,11 @@ public class RegionPrefectures extends Program {
     final String[] args;
 
     // WORKING-STORAGE SECTION.
-    final Pic_9 argc                = new Pic_9(2);
-    final Pic_X dataDir             = new Pic_X(80);
-    final Pic_X regionsFilename     = new Pic_X(80);
-    final Pic_X prefecturesFilename = new Pic_X(80);
-    final Pic_9 n                   = new Pic_9(2);
+    final Pic9 argc                = new Pic9(2);
+    final PicX dataDir             = new PicX(80);
+    final PicX regionsFilename     = new PicX(80);
+    final PicX prefecturesFilename = new PicX(80);
+    final Pic9 n                   = new Pic9(2);
 
     /**
      * 地方の一覧。
@@ -56,7 +56,7 @@ public class RegionPrefectures extends Program {
     void acceptFilenames() {
         argc.set(args.length);
         if (argc.eq(0)) {
-            Pic_X.of("../data").moveTo(dataDir);
+            PicX.of("../data").moveTo(dataDir);
         } else {
             dataDir.set(args[0]);
         }
@@ -71,9 +71,9 @@ public class RegionPrefectures extends Program {
     class Strlen extends Program {
 
         // LINKAGE SECTION.
-        Pic_X s;
+        PicX s;
 
-        public Strlen using(Pic_X s) {
+        public Strlen using(PicX s) {
             this.s = s;
             return this;
         }

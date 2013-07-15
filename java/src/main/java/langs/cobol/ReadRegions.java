@@ -3,9 +3,9 @@ package langs.cobol;
 import langs.cobol.framework.File;
 import langs.cobol.framework.GroupItem;
 import langs.cobol.framework.Organization;
-import langs.cobol.framework.Pic_9;
-import langs.cobol.framework.Pic_N;
-import langs.cobol.framework.Pic_X;
+import langs.cobol.framework.Pic9;
+import langs.cobol.framework.PicN;
+import langs.cobol.framework.PicX;
 import langs.cobol.framework.Program;
 
 /**
@@ -18,13 +18,13 @@ public class ReadRegions extends Program {
     final RegionRecord regionRecord = new RegionRecord();
 
     // WORKING-STORAGE SECTION.
-    final Pic_X regionsStatus = new Pic_X(2);
+    final PicX regionsStatus = new PicX(2);
 
     // LINKAGE SECTION.
-    Pic_X regionsFilename;
+    PicX regionsFilename;
     Regions regions;
 
-    public ReadRegions using(Pic_X regionsFilename, Regions regions) {
+    public ReadRegions using(PicX regionsFilename, Regions regions) {
         this.regionsFilename = regionsFilename;
         this.regions = regions;
         // FILE-CONTROL.
@@ -45,7 +45,7 @@ public class ReadRegions extends Program {
                 if (!regionsFile.atEnd()) {
                     regions.regionsCount.add(1);
                     regionRecord.moveTo(regions.region(i));
-                    Pic_9.of(0).moveTo(regions.prefecturesCount(i));
+                    Pic9.of(0).moveTo(regions.prefecturesCount(i));
                     i += 1;
                 }
             }
@@ -56,8 +56,8 @@ public class ReadRegions extends Program {
 
     static class RegionRecord extends GroupItem<RegionRecord> {
 
-        public Pic_X regionCode = new Pic_X(2);
-        public Pic_N name       = new Pic_N(4);
+        public PicX regionCode = new PicX(2);
+        public PicN name       = new PicN(4);
 
         public void moveTo(Regions.Region region) {
             regionCode.moveTo(region.regionCode);
