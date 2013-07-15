@@ -1,9 +1,20 @@
 package langs.cobol.framework;
 
-public abstract class Program {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    protected void display(Object value) {
-        System.out.println(value);
+public abstract class Program extends CobolUtils {
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected static void initialize(DataItem<?> item) {
+        item.initialize();
     }
+
+    protected static void call(Program program) {
+        program.execute();
+    }
+
+    public abstract void execute();
 
 }

@@ -5,6 +5,6 @@ import java.io.IOException;
 
 public interface FileHandler extends Closeable {
 
-    public String readLine() throws IOException;
+    public byte[] read() throws IOException;
 
 }

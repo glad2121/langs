@@ -1,19 +1,21 @@
 package langs.cobol.framework;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class File {
 
     public static final String SUCCESS = "00";
-
     public static final String FAILURE = "99";
+    public static final String AT_END  = "99";
 
-    public static final String AT_END = "99";
+    static final Logger logger = LoggerFactory.getLogger(File.class);
+
+    private DataItem<?> record;
 
     private String assignTo;
-
-    private Charset encoding = Charset.defaultCharset();
 
     private Organization organization;
 
@@ -21,11 +23,27 @@ public class File {
 
     private FileHandler handler;
 
-    public File(
-            String assignTo, Organization organization, Pic_X status) {
+    public File(DataItem<?> record) {
+        this.record = record;
+    }
+
+    public File assignTo(String assignTo) {
         this.assignTo = assignTo;
+        return this;
+    }
+
+    public File assignTo(Pic_X assignTo) {
+        return assignTo(assignTo.value());
+    }
+
+    public File orginizationIs(Organization organization) {
         this.organization = organization;
+        return this;
+    }
+
+    public File fileStatusIs(Pic_X status) {
         this.status = status;
+        return this;
     }
 
     public void openInput() {
@@ -39,28 +57,27 @@ public class File {
 
     FileHandler createFileHandler() throws IOException {
         if (organization == Organization.LINE_SEQUENTIAL) {
-            return new LineSequentialInputFileHandler(assignTo, encoding);
+            return new LineSequentialInputFileHandler(assignTo);
         }
         throw new IllegalArgumentException("organization=" + organization);
     }
 
     public void read() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String readLine() {
         try {
-            String line = handler.readLine();
-            status.set(line != null ? SUCCESS : AT_END);
-            return line;
+            byte[] buf = handler.read();
+            if (buf != null) {
+                record.readFrom(buf, 0);
+                status.set(SUCCESS);
+            } else {
+                status.set(AT_END);
+            }
         } catch (IOException e) {
             status.set(FAILURE);
-            return null;
         }
     }
 
     public boolean atEnd() {
-        return status.equalTo(AT_END);
+        return status.eq(AT_END);
     }
 
     public void close() {
@@ -70,12 +87,6 @@ public class File {
         } catch (IOException e) {
             status.set(FAILURE);
         }
-    }
-
-    public enum Organization {
-
-        LINE_SEQUENTIAL
-
     }
 
 }

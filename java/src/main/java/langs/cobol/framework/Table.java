@@ -1,13 +1,19 @@
 package langs.cobol.framework;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class Table<E> {
+public class Table<E> extends GroupItem<Table<E>> {
 
     private E[] values;
 
-    public static <E> Table<E> create(E... values) {
+    public static <E> Table<E> of(E... values) {
         return new Table<E>(values);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> Table<E> of(Class<E> elementType, int occurs) {
+        return new Table<E>((E[]) Array.newInstance(elementType, occurs));
     }
 
     public Table(E... values) {

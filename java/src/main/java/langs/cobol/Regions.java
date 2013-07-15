@@ -1,5 +1,6 @@
 package langs.cobol;
 
+import langs.cobol.framework.GroupItem;
 import langs.cobol.framework.Pic_9;
 import langs.cobol.framework.Pic_N;
 import langs.cobol.framework.Pic_X;
@@ -8,15 +9,27 @@ import langs.cobol.framework.Table;
 /**
  * 地方。
  */
-public class Regions {
+public class Regions extends GroupItem<Regions> {
 
     public final Pic_9 regionsCount = new Pic_9(2);
 
     public final Table<Region> region =
-            Table.create(new Region[10]);
+            Table.of(Region.class, 10);
 
     public Region region(int i) {
         return region.get(i);
+    }
+
+    public Pic_X regionCode(int i) {
+        return region(i).regionCode;
+    }
+
+    public Pic_N regionName(int i) {
+        return region(i).regionName;
+    }
+
+    void addRegion(String code, String name) {
+        region(regionsCount.add(1).intValue()).set(code, name);
     }
 
     public Pic_9 prefecturesCount(int i) {
@@ -25,6 +38,14 @@ public class Regions {
 
     public Prefecture prefecture(int i, int j) {
         return region(i).prefecture(j);
+    }
+
+    public Pic_X prefectureCode(int i, int j) {
+        return prefecture(i, j).prefectureCode;
+    }
+
+    public Pic_N prefectureName(int i, int j) {
+        return prefecture(i, j).prefectureName;
     }
 
     @Override
@@ -42,10 +63,15 @@ public class Regions {
         public final Pic_9 prefecturesCount = new Pic_9(2);
 
         public final Table<Prefecture> prefecture =
-                Table.create(new Prefecture[10]);
+                Table.of(Prefecture.class, 10);
+
+        void set(String code, String name) {
+            this.regionCode.set(code);
+            this.regionName.set(name);
+        }
 
         public Prefecture prefecture(int j) {
-            return prefecture(j);
+            return prefecture.get(j);
         }
 
         @Override

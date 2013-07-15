@@ -1,6 +1,8 @@
 package langs.cobol;
 
 import langs.cobol.framework.File;
+import langs.cobol.framework.GroupItem;
+import langs.cobol.framework.Organization;
 import langs.cobol.framework.Pic_N;
 import langs.cobol.framework.Pic_X;
 import langs.cobol.framework.Program;
@@ -11,6 +13,7 @@ import langs.cobol.framework.Program;
 public class ReadPrefectures extends Program {
 
     // FILE SECTION.
+    File prefecturesFile;
     final PrefectureRecord prefectureRecord = new PrefectureRecord();
 
     // WORKING-STORAGE SECTION.
@@ -20,16 +23,23 @@ public class ReadPrefectures extends Program {
     Pic_X prefecturesFilename;
     Regions regions;
 
-    public void execute(Pic_X prefecturesFilename, Regions regions) {
-        using(prefecturesFilename, regions);
-        File prefecturesFile = new PrefecturesFile(
-                prefectureRecord,
-                prefecturesFilename.get(),
-                File.Organization.LINE_SEQUENTIAL,
-                prefecturesStatus);
+    public ReadPrefectures using(
+            Pic_X prefecturesFilename, Regions regions) {
+        this.prefecturesFilename = prefecturesFilename;
+        this.regions = regions;
+        // FILE-CONTROL.
+        this.prefecturesFile = new File(prefectureRecord)
+                .assignTo(prefecturesFilename)
+                .orginizationIs(Organization.LINE_SEQUENTIAL)
+                .fileStatusIs(prefecturesStatus);
+        return this;
+    }
+
+    // PROCEDURE DIVISION.
+    public void execute() {
         prefecturesFile.openInput();
         try {
-            while (prefecturesStatus.equalTo(File.SUCCESS)) {
+            while (prefecturesStatus.eq(File.SUCCESS)) {
                 prefecturesFile.read();
                 if (!prefecturesFile.atEnd()) {
                     addPrefecture();
@@ -40,63 +50,42 @@ public class ReadPrefectures extends Program {
         }
     }
 
-    void using(Pic_X prefecturesFilename, Regions regions) {
-        this.prefecturesFilename = prefecturesFilename;
-        this.regions = regions;
-    }
-
     /**
      * 地方に都道府県を追加します。
      */
     void addPrefecture() {
         int i = 1;
-        for (;;) {
+        for (;;++i) {
             if (regions.region.atEnd(i)) {
                 display("REGION NOT-FOUND");
-            } else if (prefectureRecord.regionCode.equalTo(
+                break;
+            }
+            if (prefectureRecord.regionCode.eq(
                     regions.region(i).regionCode)) {
                 regions.prefecturesCount(i).add(1);
-                int j = regions.prefecturesCount(i).getInt();
+                int j = regions.prefecturesCount(i).intValue();
                 prefectureRecord.moveTo(regions.prefecture(i, j));
+                break;
             }
         }
     }
 
-    public static class PrefecturesFile extends File {
-
-        private PrefectureRecord record;
-
-        public PrefecturesFile(
-                PrefectureRecord record,
-                String assignTo,
-                Organization organization,
-                Pic_X status) {
-            super(assignTo, organization, status);
-            this.record = record;
-        }
-
-        @Override
-        public void read() {
-            record.read(readLine());
-        }
-
-    }
-
-    public static class PrefectureRecord {
+    static class PrefectureRecord extends GroupItem<PrefectureRecord> {
 
         public final Pic_X prefectureCode = new Pic_X(2);
         public final Pic_N name           = new Pic_N(5);
         public final Pic_X regionCode     = new Pic_X(2);
 
-        public void read(String line) {
-            prefectureCode.set(line, 0);
-            name.set(line, 2);
-            regionCode.set(line, 7);
-        }
-
         public void moveTo(Regions.Prefecture target) {
             prefectureCode.moveTo(target.prefectureCode);
             name.moveTo(target.prefectureName);
+        }
+
+        @Override
+        public void readFrom(byte[] buf, int offset) {
+            prefectureCode.readFrom(buf, offset);
+            name.readFrom(buf, offset + 2);
+            regionCode.readFrom(buf, offset + 12);
         }
 
         @Override

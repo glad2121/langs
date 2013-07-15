@@ -5,6 +5,7 @@ import langs.cobol.framework.Program;
 
 public class FizzBuzz extends Program {
 
+    // DATA DIVISION.
     // WORKING-STORAGE SECTION.
     final Pic_9 i  = new Pic_9(4);
     final Pic_9 q  = new Pic_9(4);
@@ -15,18 +16,19 @@ public class FizzBuzz extends Program {
         new FizzBuzz().execute();
     }
 
+    // PROCEDURE DIVISION.
     public void execute() {
-        for (i.set(1); i.getInt() <= 1000; i.add(1)) {
-            i.divide(3, q, r3);
-            i.divide(5, q, r5);
-            if (r3.getInt() == 0) {
-                if (r5.getInt() == 0) {
+        for (i.set(1); !i.gt(100); i.add(1)) {
+            i.divideBy(3, q, r3);
+            i.divideBy(5, q, r5);
+            if (r3.eq(0)) {
+                if (r5.eq(0)) {
                     display("FizzBuzz");
                 } else {
                     display("Fizz");
                 }
             } else {
-                if (r5.getInt() == 0) {
+                if (r5.eq(0)) {
                     display("Buzz");
                 } else {
                     showNumber();
