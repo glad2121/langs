@@ -16,6 +16,12 @@ public class ReadPrefectures extends Program {
     File prefecturesFile;
     final PrefectureRecord prefectureRecord = new PrefectureRecord();
 
+    static class PrefectureRecord extends GroupItem<PrefectureRecord> {
+        final PicX prefectureCode = new PicX(2);
+        final PicN name           = new PicN(5);
+        final PicX regionCode     = new PicX(2);
+    }
+
     // WORKING-STORAGE SECTION.
     final PicX prefecturesStatus = new PicX(2);
 
@@ -68,35 +74,6 @@ public class ReadPrefectures extends Program {
                 break;
             }
         }
-    }
-
-    static class PrefectureRecord extends GroupItem<PrefectureRecord> {
-
-        public final PicX prefectureCode = new PicX(2);
-        public final PicN name           = new PicN(5);
-        public final PicX regionCode     = new PicX(2);
-
-        public void moveTo(Regions.Prefecture target) {
-            prefectureCode.moveTo(target.prefectureCode);
-            name.moveTo(target.prefectureName);
-        }
-
-        @Override
-        public void readFrom(byte[] buf, int offset) {
-            prefectureCode.readFrom(buf, offset);
-            name.readFrom(buf, offset + 2);
-            regionCode.readFrom(buf, offset + 12);
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName()
-                    + " {prefectureCode=" + prefectureCode
-                    + ", name=" + name
-                    + ", regionCode=" + regionCode
-                    + '}';
-        }
-
     }
 
 }

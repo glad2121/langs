@@ -21,8 +21,13 @@ public class PicX extends ElementaryItem<PicX, String> {
     }
 
     @Override
-    public void readFrom(byte[] buf, int offset) {
-        set(new String(buf, offset, byteLength(), encoding()));
+    public int readFrom(byte[] buf, int offset) {
+        int length = Math.min(buf.length - offset, byteLength());
+        if (length < 0) {
+            return -1;
+        }
+        set(new String(buf, offset, length, encoding()));
+        return length;
     }
 
     @Override

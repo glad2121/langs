@@ -48,15 +48,7 @@ public class Regions extends GroupItem<Regions> {
         return prefecture(i, j).prefectureName;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName()
-                + " {regionsCount=" + regionsCount
-                + ", region=" + region
-                + '}';
-    }
-
-    public static class Region {
+    public static class Region extends GroupItem<Region> {
 
         public final PicX regionCode       = new PicX(2);
         public final PicN regionName       = new PicN(4);
@@ -74,30 +66,12 @@ public class Regions extends GroupItem<Regions> {
             return prefecture.get(j);
         }
 
-        @Override
-        public String toString() {
-            return getClass().getSimpleName()
-                    + " {regionCode=" + regionCode
-                    + ", regionName=" + regionName
-                    + ", prefecturesCount=" + prefecturesCount
-                    + ", prefecture=" + prefecture
-                    + '}';
-        }
-
     }
 
-    public static class Prefecture {
+    public static class Prefecture extends GroupItem<Prefecture> {
 
         public final PicX prefectureCode = new PicX(2);
         public final PicN prefectureName = new PicN(5);
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName()
-                    + " {prefectureCode=" + prefectureCode
-                    + ", prefectureName=" + prefectureName
-                    + '}';
-        }
 
     }
 

@@ -17,6 +17,11 @@ public class ReadRegions extends Program {
     File regionsFile;
     final RegionRecord regionRecord = new RegionRecord();
 
+    static class RegionRecord extends GroupItem<RegionRecord> {
+        final PicX regionCode = new PicX(2);
+        final PicN name       = new PicN(4);
+    }
+
     // WORKING-STORAGE SECTION.
     final PicX regionsStatus = new PicX(2);
 
@@ -52,32 +57,6 @@ public class ReadRegions extends Program {
         } finally {
             regionsFile.close();
         }
-    }
-
-    static class RegionRecord extends GroupItem<RegionRecord> {
-
-        public PicX regionCode = new PicX(2);
-        public PicN name       = new PicN(4);
-
-        public void moveTo(Regions.Region region) {
-            regionCode.moveTo(region.regionCode);
-            name.moveTo(region.regionName);
-        }
-
-        @Override
-        public void readFrom(byte[] buf, int offset) {
-            regionCode.readFrom(buf, offset);
-            name.readFrom(buf, offset + 2);
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName()
-                    + " {regionCode=" + regionCode
-                    + ", name=" + name
-                    + '}';
-        }
-
     }
 
 }

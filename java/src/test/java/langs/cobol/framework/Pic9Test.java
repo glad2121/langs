@@ -25,6 +25,7 @@ public class Pic9Test {
         Pic9 value = new Pic9(10);
         assertThat(value.length(), is(10));
         assertThat(value.scale(), is(0));
+        assertThat(value.byteLength(), is(10));
         
         value.value("123.45");
         assertThat(value.toString(), is("123"));
@@ -50,6 +51,7 @@ public class Pic9Test {
         Pic9 value = new Pic9(10, 2);
         assertThat(value.length(), is(10));
         assertThat(value.scale(), is(2));
+        assertThat(value.byteLength(), is(10));
         
         value.value("123.45");
         assertThat(value.toString(), is("123.45"));
@@ -75,6 +77,7 @@ public class Pic9Test {
         Pic9 value = new Pic9(10, -2);
         assertThat(value.length(), is(10));
         assertThat(value.scale(), is(-2));
+        assertThat(value.byteLength(), is(10));
         
         value.value("123.45");
         assertThat(value.toString(), is("100"));
@@ -93,17 +96,43 @@ public class Pic9Test {
     }
 
     @Test
+    public void testClone() {
+        Pic9 value = new Pic9(10, 2).value("123.45");
+        Pic9 clone = value.clone();
+        assertThat(clone.value(), sameInstance(value.value()));
+        assertThat(clone.toString(), is("123.45"));
+        
+        clone.set("234.56");
+        assertThat(clone.toString(), is("234.56"));
+        assertThat(value.toString(), is("123.45"));
+    }
+
+    @Test
     public void testCompare() {
         Pic9 value = Pic9.of(1000);
-        assertTrue(value.eq(Pic9.of(1000L)));
-        assertTrue(value.gt(Pic9.of("999.9")));
-        assertTrue(value.lt(Pic9.of("1000.1")));
+        assertFalse(value.eq(Pic9.of("999.9")));
+        assertTrue (value.eq(Pic9.of(1000)));
+        assertFalse(value.eq(Pic9.of("1000.1")));
+        
+        assertTrue (value.gt(Pic9.of("999.9")));
+        assertFalse(value.gt(Pic9.of(1000)));
+        
+        assertTrue (value.ge(Pic9.of("999.9")));
+        assertTrue (value.ge(Pic9.of(1000)));
+        assertFalse(value.ge(Pic9.of("1000.1")));
+        
+        assertFalse(value.lt(Pic9.of(1000)));
+        assertTrue (value.lt(Pic9.of("1000.1")));
+        
+        assertFalse(value.le(Pic9.of("999.9")));
+        assertTrue (value.le(Pic9.of(1000)));
+        assertTrue (value.le(Pic9.of("1000.1")));
     }
 
     @Test
     public void testAdd() {
         Pic9 value = Pic9.of(1000);
-        value.add(200);
+        Pic9.of(200).addTo(value);
         assertThat(value.intValue(), is(1200));
     }
 

@@ -18,9 +18,10 @@ public class PicNTest {
     }
 
     @Test
-    public void test() {
+    public void testCore() {
         PicN value = new PicN(5);
         assertThat(value.length(), is(5));
+        assertThat(value.byteLength(), is(10));
         
         value.value("あいう");
         assertThat(value.toString(), is("あいう"));
@@ -28,6 +29,18 @@ public class PicNTest {
         
         value.readFrom(toByteArray("xx１２３４５xx"), 2);
         assertThat(value.toString(), is("１２３４５"));
+    }
+
+    @Test
+    public void testClone() {
+        PicN value = new PicN(10).value("あいう");
+        PicN clone = value.clone();
+        assertThat(clone.value(), sameInstance(value.value()));
+        assertThat(clone.value(), is("あいう"));
+        
+        clone.set("かきく");
+        assertThat(clone.value(), is("かきく"));
+        assertThat(value.value(), is("あいう"));
     }
 
     String toString(byte[] bytes) {

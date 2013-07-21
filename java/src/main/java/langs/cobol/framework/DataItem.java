@@ -25,20 +25,22 @@ public abstract class DataItem<T extends DataItem<T>>
         throw new UnsupportedOperationException();
     }
 
-    public void readFrom(InputStream in) {
+    public int readFrom(InputStream in) {
         try {
-            byte[] buf = new byte[byteLength()];
-            in.read(buf);
-            readFrom(buf, 0);
+            byte[] buf = JavaUtils.read(in, byteLength());
+            if (buf == null) {
+                return -1;
+            }
+            return readFrom(buf, 0);
         } catch (IOException e) {
             throw new CobolException(e);
         }
     }
 
-    public void readFrom(byte[] buf, int offset) {
+    public int readFrom(byte[] buf, int offset) {
         InputStream in = new ByteArrayInputStream(buf);
         in.mark(offset);
-        readFrom(in);
+        return readFrom(in);
     }
 
     public void writeTo(OutputStream out) {
