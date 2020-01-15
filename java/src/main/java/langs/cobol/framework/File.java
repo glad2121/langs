@@ -2,8 +2,8 @@ package langs.cobol.framework;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class File {
 
@@ -11,7 +11,7 @@ public class File {
     public static final String FAILURE = "99";
     public static final String AT_END  = "99";
 
-    static final Logger logger = LoggerFactory.getLogger(File.class);
+    static final Logger logger = LogManager.getLogger();
 
     private DataItem<?> record;
 

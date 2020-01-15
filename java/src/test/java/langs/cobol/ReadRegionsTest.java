@@ -1,12 +1,12 @@
 package langs.cobol;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import langs.cobol.framework.PicX;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import langs.cobol.framework.PicX;
 
 public class ReadRegionsTest {
 
@@ -27,7 +27,7 @@ public class ReadRegionsTest {
         PicX filename = PicX.of("../data/Regions.txt");
         Regions regions = new Regions();
         program.using(filename, regions).execute();
-        assertThat(regions.regionsCount.intValue(), is(8));
+        assertThat(regions.regionsCount.intValue()).isEqualTo(8);
     }
 
 }

@@ -1,7 +1,6 @@
 package langs.cobol;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,9 +23,9 @@ public class RegionsTest {
     @Test
     public void testAddRegion() {
         regions.addRegion("01", "北海道");
-        assertThat(regions.regionsCount.intValue(), is(1));
-        assertThat(regions.region(1).regionCode.value(), is("01"));
-        assertThat(regions.region(1).regionName.value(), is("北海道"));
+        assertThat(regions.regionsCount.intValue()).isEqualTo(1);
+        assertThat(regions.region(1).regionCode.value()).isEqualTo("01");
+        assertThat(regions.region(1).regionName.value()).isEqualTo("北海道");
     }
 
 }

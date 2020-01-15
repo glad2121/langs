@@ -1,7 +1,6 @@
 package langs.cobol.framework;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,27 +19,27 @@ public class PicNTest {
     @Test
     public void testCore() {
         PicN value = new PicN(5);
-        assertThat(value.length(), is(5));
-        assertThat(value.byteLength(), is(10));
-        
+        assertThat(value.length()).isEqualTo(5);
+        assertThat(value.byteLength()).isEqualTo(10);
+
         value.value("あいう");
-        assertThat(value.toString(), is("あいう"));
-        assertThat(toString(value.toByteArray()), is("あいう　　"));
-        
+        assertThat(value).hasToString("あいう");
+        assertThat(toString(value.toByteArray())).isEqualTo("あいう　　");
+
         value.readFrom(toByteArray("xx１２３４５xx"), 2);
-        assertThat(value.toString(), is("１２３４５"));
+        assertThat(value).hasToString("１２３４５");
     }
 
     @Test
     public void testClone() {
         PicN value = new PicN(10).value("あいう");
         PicN clone = value.clone();
-        assertThat(clone.value(), sameInstance(value.value()));
-        assertThat(clone.value(), is("あいう"));
-        
+        assertThat(clone.value()).isSameAs(value.value());
+        assertThat(clone.value()).isEqualTo("あいう");
+
         clone.set("かきく");
-        assertThat(clone.value(), is("かきく"));
-        assertThat(value.value(), is("あいう"));
+        assertThat(clone.value()).isEqualTo("かきく");
+        assertThat(value.value()).isEqualTo("あいう");
     }
 
     String toString(byte[] bytes) {

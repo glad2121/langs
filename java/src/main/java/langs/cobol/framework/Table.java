@@ -10,6 +10,7 @@ public class Table<E extends DataItem<E>>
 
     private E[] elements;
 
+    @SafeVarargs
     public static <E extends DataItem<E>>
             Table<E> of(E... elements) {
         return new Table<E>(elements);
@@ -21,6 +22,7 @@ public class Table<E extends DataItem<E>>
         return new Table<E>((E[]) Array.newInstance(elementType, occurs));
     }
 
+    @SafeVarargs
     public Table(E... elements) {
         this.elements = elements;
     }
